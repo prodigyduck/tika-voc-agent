@@ -1,0 +1,41 @@
+from backend.manual_retrieval import load_manual, search
+
+
+def test_메뉴얼_로드_섹션_분해():
+    chunks = load_manual()
+    assert len(chunks) >= 15  # 5개 문서의 전체 섹션 수
+    first = chunks[0]
+    assert first.file == "01-getting-started"
+    assert first.source == f"01-getting-started#{first.section}"
+    assert first.content  # 내용이 비어 있지 않음
+
+
+def test_저장_문의가_문제해결_섹션을_찾는다():
+    chunks = load_manual()
+    results = search(chunks, "할 일이 저장되지 않아요", category="사용법문의")
+    assert any("저장되지" in c.section for c in results)
+
+
+def test_사용법_문의는_가이드_문서_우선():
+    chunks = load_manual()
+    results = search(chunks, "완료한 할 일이 목록에서 안 보여요", category="사용법문의")
+    assert results
+    assert results[0].file.startswith(("01", "02", "03"))
+
+
+def test_불만은_문제해결_문서_우선():
+    chunks = load_manual()
+    results = search(chunks, "이메일이 오지 않아요", category="불만")
+    assert results
+    assert results[0].file.startswith(("04", "05"))
+
+
+def test_관련_없는_질문은_빈_결과():
+    chunks = load_manual()
+    assert search(chunks, "zzz qq", category="사용법문의") == []
+
+
+def test_상위_3개만_반환():
+    chunks = load_manual()
+    results = search(chunks, "할 일 추가 완료 삭제 저장 검색 이메일 메모", category="사용법문의")
+    assert 0 < len(results) <= 3
