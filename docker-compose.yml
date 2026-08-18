@@ -1,0 +1,13 @@
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: tika
+      POSTGRES_PASSWORD: tika
+      POSTGRES_DB: tika_agent
+    ports:
+      - "5432:5432"
+    volumes:
+      - tika_pgdata:/var/lib/postgresql/data
+volumes:
+  tika_pgdata:
