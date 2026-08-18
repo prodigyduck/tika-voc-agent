@@ -18,7 +18,7 @@ def test_저장_문의가_문제해결_섹션을_찾는다():
 
 def test_사용법_문의는_가이드_문서_우선():
     chunks = load_manual()
-    results = search(chunks, "완료한 할 일이 목록에서 안 보여요", category="사용법문의")
+    results = search(chunks, "할 일을 어떻게 추가하나요?", category="사용법문의")
     assert results
     assert results[0].file.startswith(("01", "02", "03"))
 
@@ -39,3 +39,11 @@ def test_상위_3개만_반환():
     chunks = load_manual()
     results = search(chunks, "할 일 추가 완료 삭제 저장 검색 이메일 메모", category="사용법문의")
     assert 0 < len(results) <= 3
+
+
+def test_정확한_제목_매칭은_카테고리_우선순위보다_우선():
+    chunks = load_manual()
+    results = search(chunks, "완료한 할 일이 목록에서 안 보여요", category="사용법문의")
+    assert results
+    # 정확한 제목 매칭(04-troubleshooting)이 카테고리 우선순위보다 우선
+    assert results[0].section == "완료한 할 일이 목록에서 안 보여요"

@@ -60,7 +60,7 @@ def _score(chunk: ManualChunk, tokens: List[str], preferred: Tuple[str, ...]) ->
         score += chunk.content.count(token)
     # 분류 유형별 문서 보너스는 토큰 매칭이 있을 때만 적용
     if score > 0 and chunk.file.startswith(preferred):
-        score += 16
+        score += 2
     return score
 
 
