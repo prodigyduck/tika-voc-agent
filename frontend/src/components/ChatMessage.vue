@@ -28,6 +28,9 @@ defineProps({
       <span v-if="message.escalated" class="badge escalate">⚠ 사람 확인 필요</span>
     </div>
     <div class="bubble" v-html="renderMarkdown(message.content)"></div>
+    <div v-if="message.role === 'agent' && message.sources && message.sources.length" class="msg-sources">
+      출처: {{ message.sources.join(', ') }}
+    </div>
   </div>
 </template>
 
@@ -43,4 +46,5 @@ defineProps({
 .badges { display: flex; gap: 6px; margin-bottom: 4px; }
 .badge { font-size: 12px; color: #fff; padding: 2px 8px; border-radius: 10px; }
 .badge.escalate { background: #b45309; }
+.msg-sources { font-size: 11px; color: #6b7280; margin-top: 4px; font-style: italic; }
 </style>
