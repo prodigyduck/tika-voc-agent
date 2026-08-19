@@ -6,11 +6,6 @@ import StatsCards from '../components/StatsCards.vue'
 
 const CATEGORIES = ['사용법문의', '버그제보', '기능요청', '불만', '칭찬', '기타']
 
-const STATUS_LABELS = {
-  open: '미해결',
-  resolved: '해결',
-}
-
 const PRIORITY_LABELS = {
   low: '낮음',
   medium: '보통',

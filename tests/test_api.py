@@ -1,5 +1,4 @@
 """FastAPI 엔드포인트 테스트 (스펙 §6.1)."""
-import pytest
 from fastapi.testclient import TestClient
 
 from backend.main import create_app
@@ -11,14 +10,6 @@ CLASSIFY_BUG = '{"category": "버그제보", "priority": "high"}'
 
 def make_provider(responses):
     return FakeProvider(responses)
-
-
-@pytest.fixture(autouse=True)
-def clean_db(db_session_factory):
-    """각 테스트 전 DB 초기화"""
-    # db_session_factory fixture가 이미 drop_all/create_all을 수행하므로
-    # 여기서는 세션 팩토리만 전달하면 됨
-    pass
 
 
 def make_app(provider, session_factory):

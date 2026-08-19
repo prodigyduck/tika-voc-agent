@@ -1,5 +1,5 @@
 """에이전트 상태 — 파이프라인 진행에 따라 점진적으로 채워진다 (스펙 §4.3)."""
-from typing import List, Optional, TypedDict
+from typing import List, TypedDict
 
 
 class AgentState(TypedDict, total=False):
