@@ -11,7 +11,7 @@ model: sonnet
 1. 백엔드 테스트 전체 실행 (`pytest -q`) — 실패 시 차단
 2. 메뉴얼 린트 (`python scripts/lint_manual.py`) — 실패 시 차단
 3. 프론트 테스트/빌드 (`cd frontend && npm test && npm run build`) — 실패 시 차단
-4. E2E 시나리오 (`python scripts/e2e_check.py`) — 실제 LLM으로 5개 대표 VOC 검증
+4. E2E 시나리오 (`python scripts/e2e_check.py`) — 실제 LLM으로 6개 대표 VOC 검증
 5. MVP 기준(스펙 §9) 6개 항목 체크 (`docs/qa/e2e-checklist.md`)
 
 ## 품질 게이트 (성공 지표)

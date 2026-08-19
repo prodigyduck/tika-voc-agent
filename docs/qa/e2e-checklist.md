@@ -7,7 +7,7 @@
 - [x] `pytest -q` 전체 통과
 - [x] `python scripts/lint_manual.py` 통과
 - [x] `cd frontend && npm test && npm run build` 통과
-- [x] `python scripts/e2e_check.py` 5/5 통과
+- [x] `python scripts/e2e_check.py` 6/6 통과
 
 ## 수동 — MVP 완료 기준 (스펙 §9)
 

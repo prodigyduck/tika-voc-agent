@@ -34,6 +34,25 @@ def _tokenize(text: str) -> List[str]:
     return re.findall(r"[가-힣A-Za-z0-9]{2,}", text)
 
 
+# 한국어 활용 어미 — "삭제하나요"/"삭제하기"처럼 어형만 다른 동사를 맞추기 위한 근사 정규화.
+# 긴 어미부터 확인하고, 벗겼을 때 어간이 2자 미만이면 그대로 둔다.
+_VERB_ENDINGS = (
+    "하나요", "하세요", "하네요", "합니다", "습니다", "습니까",
+    "어요", "아요", "해요", "네요", "나요", "까요",
+    "하고", "하기", "하다", "하면", "해서",
+    "요", "고", "기", "다", "네", "죠", "면", "서",
+    "을", "를", "은", "는", "이", "가",
+)
+
+
+def _normalize_token(token: str) -> str:
+    """어미를 벗겨 어형 차이를 흡수한 어간 근사값. 예: 삭제하나요/삭제하기 → 삭제."""
+    for ending in _VERB_ENDINGS:
+        if token.endswith(ending) and len(token) - len(ending) >= 2:
+            return token[: -len(ending)]
+    return token
+
+
 def load_manual(manual_dir: Path = MANUAL_DIR) -> List[ManualChunk]:
     """manual/*.md 를 읽어 `##` 단위 청크로 분해. index.md는 제외."""
     chunks: List[ManualChunk] = []
@@ -53,10 +72,13 @@ def load_manual(manual_dir: Path = MANUAL_DIR) -> List[ManualChunk]:
 
 
 def _score(chunk: ManualChunk, tokens: List[str], preferred: Tuple[str, ...]) -> int:
+    section_stems = {_normalize_token(t) for t in _tokenize(chunk.section)}
     score = 0
     for token in tokens:
         if token in chunk.section:
             score += 3  # 제목 매칭 고가중 (스펙 §5.3)
+        elif _normalize_token(token) in section_stems:
+            score += 2  # 어형만 다른 제목 부분 매칭 (삭제하나요 ↔ 삭제하기)
         score += chunk.content.count(token)
     # 분류 유형별 문서 보너스는 토큰 매칭이 있을 때만 적용
     if score > 0 and chunk.file.startswith(preferred):

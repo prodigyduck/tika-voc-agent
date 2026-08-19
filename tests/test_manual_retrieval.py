@@ -47,3 +47,18 @@ def test_정확한_제목_매칭은_카테고리_우선순위보다_우선():
     assert results
     # 정확한 제목 매칭(04-troubleshooting)이 카테고리 우선순위보다 우선
     assert results[0].section == "완료한 할 일이 목록에서 안 보여요"
+
+
+def test_어형이_달라도_제목을_찾는다():
+    chunks = load_manual()
+    # "삭제하나요"(질문형)와 "삭제하기"(제목)은 어형만 다른 같은 동사
+    results = search(chunks, "할 일을 어떻게 삭제하나요?", category="사용법문의")
+    assert results
+    assert results[0].section == "할 일 삭제하기"
+
+
+def test_어형_정규화():
+    from backend.manual_retrieval import _normalize_token
+
+    assert _normalize_token("삭제하나요") == _normalize_token("삭제하기") == "삭제"
+    assert _normalize_token("추가하나요") == _normalize_token("추가하기") == "추가"
