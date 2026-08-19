@@ -17,7 +17,9 @@ def make_save_node(session_factory: Callable):
                     answer=state.get("answer"),
                     answer_sources=state.get("answer_sources") or [],
                     escalated=bool(state.get("escalated")),
-                    escalation_reason=state.get("escalation_reason"),
+                    # escalation_reason 컬럼이 String(200)이라 200자로 절단 —
+                    # LLM 실패 사유가 길어 PostgreSQL INSERT가 실패하면 이력이 통째로 유실된다
+                    escalation_reason=(state.get("escalation_reason") or "")[:200] or None,
                 )
                 db.add(record)
                 db.commit()

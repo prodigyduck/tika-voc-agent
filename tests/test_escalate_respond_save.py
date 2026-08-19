@@ -92,6 +92,24 @@ def test_save_노드_답변_경로_저장(db_session_factory):
     assert record.escalated is False
 
 
+def test_save_에스컬레이션_사유_200자_초과시_절단(db_session_factory):
+    node = make_save_node(db_session_factory)
+    result = node({
+        "voc_text": "앱이 꺼져요",
+        "session_id": "s3",
+        "category": "버그제보",
+        "priority": "high",
+        "escalated": True,
+        "escalation_reason": "x" * 500,  # LLM 실패 메시지처럼 200자 초과
+    })
+    assert isinstance(result["voc_id"], int)
+
+    db = db_session_factory()
+    record = db.query(VocRecord).filter_by(session_id="s3").first()
+    db.close()
+    assert len(record.escalation_reason) == 200
+
+
 def test_save_실패해도_폭발하지_않음():
     def broken_factory():
         raise RuntimeError("db down")

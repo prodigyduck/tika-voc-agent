@@ -1,8 +1,9 @@
 """tika-agent LangGraph 그래프 — VOC 조건부 파이프라인 (스펙 §4.1).
 
-classify → (route) → retrieve → answer → respond → save → END
+classify → (route) → retrieve → generate_answer → compose_response → save → END
                 └────→ escalate ──↗
 """
+import functools
 from typing import Any, Callable, Dict, List, Optional
 
 from langgraph.graph import END, START, StateGraph
@@ -59,6 +60,12 @@ def build_graph(
     return builder.compile()
 
 
+@functools.lru_cache(maxsize=4)
+def _compiled_graph(provider, session_factory):
+    # 스펙 §5.3: 그래프와 메뉴얼은 캐시하여 요청마다 재컴파일/재로드하지 않는다
+    return build_graph(provider, manual_chunks=None, session_factory=session_factory)
+
+
 def run_tika_agent(
     voc_text: str,
     session_id: str,
@@ -66,6 +73,6 @@ def run_tika_agent(
     session_factory: Optional[Callable] = None,
 ) -> Dict[str, Any]:
     """VOC 하나를 그래프로 처리하고 최종 state를 반환."""
-    graph = build_graph(provider=provider, session_factory=session_factory)
+    graph = _compiled_graph(provider, session_factory)
     initial_state: AgentState = {"voc_text": voc_text, "session_id": session_id}
     return graph.invoke(initial_state)
