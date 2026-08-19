@@ -28,8 +28,14 @@ def test_상수_고정값():
     assert ESCALATION_STATUSES == ["open", "resolved"]
 
 
-def test_설정_기본값_로드():
-    from backend.config import settings
-    assert settings.llm_provider == "openai_compat"
-    assert settings.llm_model == "gpt-4o-mini"
+def test_설정_기본값_로드(monkeypatch):
+    from backend.config import Settings, settings
     assert settings.database_url == "sqlite://"  # conftest가 덮어쓴 값
+
+    # LLM 기본값은 로컬 .env(예: 라이브 E2E용 키)와 무관하게 검증
+    for key in ("LLM_PROVIDER", "LLM_BASE_URL", "LLM_MODEL"):
+        monkeypatch.delenv(key, raising=False)
+    fresh = Settings()
+    assert fresh.llm_provider == "openai_compat"
+    assert fresh.llm_base_url == "https://api.openai.com/v1"
+    assert fresh.llm_model == "gpt-4o-mini"
