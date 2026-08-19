@@ -3,6 +3,11 @@ defineProps({
   vocs: { type: Array, default: () => [] },
 })
 const emit = defineEmits(['toggle'])
+
+const STATUS_LABELS = {
+  open: '미해결',
+  resolved: '해결',
+}
 </script>
 
 <template>
@@ -20,7 +25,7 @@ const emit = defineEmits(['toggle'])
           <td>{{ v.category }}</td>
           <td class="voc-text">{{ v.escalation_reason || '-' }}</td>
           <td>
-            <span class="status" :class="v.escalation_status">{{ v.escalation_status }}</span>
+            <span class="status" :class="v.escalation_status">{{ STATUS_LABELS[v.escalation_status] }}</span>
           </td>
           <td>
             <button @click="emit('toggle', v)">

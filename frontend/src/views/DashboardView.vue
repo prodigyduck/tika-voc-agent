@@ -6,6 +6,17 @@ import StatsCards from '../components/StatsCards.vue'
 
 const CATEGORIES = ['사용법문의', '버그제보', '기능요청', '불만', '칭찬', '기타']
 
+const STATUS_LABELS = {
+  open: '미해결',
+  resolved: '해결',
+}
+
+const PRIORITY_LABELS = {
+  low: '낮음',
+  medium: '보통',
+  high: '높음',
+}
+
 const stats = ref(null)
 const vocs = ref([])
 const error = ref('')
@@ -44,6 +55,12 @@ function barWidth(count) {
   const values = Object.values(stats.value?.by_category || {})
   const max = Math.max(1, ...values)
   return Math.round((count / max) * 100) + '%'
+}
+
+// 백엔드가 타임존 없는 UTC로 저장하므로 오프셋이 없으면 UTC로 파싱한다
+function formatTime(value) {
+  const hasZone = /Z$|[+-]\d{2}:?\d{2}$/.test(value)
+  return new Date(hasZone ? value : value + 'Z').toLocaleString('ko-KR')
 }
 
 onMounted(load)
@@ -91,9 +108,9 @@ onMounted(load)
           <td>{{ v.id }}</td>
           <td class="voc-text">{{ v.voc_text }}</td>
           <td>{{ v.category }}</td>
-          <td>{{ v.priority }}</td>
+          <td>{{ PRIORITY_LABELS[v.priority] }}</td>
           <td>{{ v.escalated ? '예' : '아니오' }}</td>
-          <td>{{ new Date(v.created_at).toLocaleString('ko-KR') }}</td>
+          <td>{{ formatTime(v.created_at) }}</td>
         </tr>
       </tbody>
     </table>
