@@ -11,7 +11,7 @@ class Settings:
 
     def __init__(self) -> None:
         self.database_url: str = os.getenv(
-            "DATABASE_URL", "postgresql://tika:tika@localhost:5432/tika_agent"
+            "DATABASE_URL", "postgresql://doit:doit@localhost:5432/doit_agent"
         )
         self.llm_provider: str = os.getenv("LLM_PROVIDER", "openai_compat")
         self.llm_base_url: str = os.getenv("LLM_BASE_URL", "https://api.openai.com/v1")

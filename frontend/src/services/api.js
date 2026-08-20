@@ -38,10 +38,10 @@ export function getStats() {
 }
 
 export function getSessionId() {
-  let id = sessionStorage.getItem('tika_session_id')
+  let id = sessionStorage.getItem('doit_session_id')
   if (!id) {
     id = 's-' + Math.random().toString(36).slice(2, 10)
-    sessionStorage.setItem('tika_session_id', id)
+    sessionStorage.setItem('doit_session_id', id)
   }
   return id
 }

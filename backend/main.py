@@ -5,7 +5,7 @@ from typing import List, Optional
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 
-from backend.agent import run_tika_agent
+from backend.agent import run_agent
 from backend.config import settings
 from backend.constants import ESCALATION_STATUSES
 from backend.database import SessionLocal, init_database
@@ -45,7 +45,7 @@ def create_app(provider=None, session_factory=None) -> FastAPI:
                 status_code=503,
                 detail="LLM이 설정되지 않았습니다. .env의 LLM_API_KEY를 확인하세요.",
             )
-        result = run_tika_agent(
+        result = run_agent(
             voc_text=request.voc_text,
             session_id=request.session_id,
             provider=provider,

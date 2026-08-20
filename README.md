@@ -1,6 +1,6 @@
 # tika-agent
 
-todo 앱 **tika**의 사용자 VOC(Voice of Customer)를 처리하는 LLM 에이전트.
+티켓 칸반 보드 앱 **doit**의 사용자 VOC(Voice of Customer)를 처리하는 LLM 에이전트.
 
 - 채팅으로 VOC 입력 → 자동 분류(사용법문의/버그제보/기능요청/불만/칭찬/기타)
 - 사용법 문의는 메뉴얼(`manual/`)에 근거한 답변 + 출처 표기
@@ -42,4 +42,4 @@ python scripts/e2e_check.py      # E2E (실제 LLM, .env 필요)
 
 - 설계: `docs/superpowers/specs/2026-08-18-tika-agent-design.md`
 - 구현 계획: `docs/superpowers/plans/2026-08-18-tika-agent-mvp.md`
-- 대상 앱: `~/git/todoapp-vue-spring`
+- 대상 앱: `~/git/doit` (티켓 칸반 보드)

@@ -66,7 +66,7 @@ def _compiled_graph(provider, session_factory):
     return build_graph(provider, manual_chunks=None, session_factory=session_factory)
 
 
-def run_tika_agent(
+def run_agent(
     voc_text: str,
     session_id: str,
     provider: Optional[LLMProvider] = None,

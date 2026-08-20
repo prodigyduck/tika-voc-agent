@@ -14,7 +14,7 @@ ESCALATION_MESSAGES = {
 }
 DEFAULT_ESCALATION_MESSAGE = "문의 내용을 담당자에게 전달했습니다. 확인 후 안내드리겠습니다."
 
-ESCALATE_PROMPT = """당신은 todo 앱 'tika'의 고객 지원 담당자입니다.
+ESCALATE_PROMPT = """당신은 칸반 보드 앱 'doit'의 고객 지원 담당자입니다.
 아래 VOC는 사람이 확인해야 하는 {category} 유형입니다.
 사용자에게 전달할 접수 완료 안내 문구를 2~3문장의 친절한 한국어로 작성하세요.
 해결 방법이나 일정을 지어내지 말고, 접수되었음과 검토하겠다는 점만 안내하세요.

@@ -4,7 +4,7 @@
 
 ## 프로젝트 개요
 
-tika-agent는 todo 앱 **tika**(`~/git/todoapp-vue-spring`)의 사용자 VOC를 처리하는 LLM 에이전트다.
+tika-agent는 티켓 칸반 보드 앱 **doit**(`~/git/doit`)의 사용자 VOC를 처리하는 LLM 에이전트다.
 채팅으로 받은 VOC를 분류(6유형)하고, 메뉴얼(`manual/`)에 근거한 답변을 생성하거나 사람에게 에스컬레이션하며, 이력을 PostgreSQL에 저장한다.
 
 ## 개발 명령
@@ -41,7 +41,7 @@ python scripts/e2e_check.py            # 실제 LLM으로 대표 VOC 5개 검증
 
 ## VOC 처리 하네스
 
-**트리거:** 기능 구현/개선 요청, 단계별 진행 요청 시 `tika-orchestrator` 스킬 사용.
+**트리거:** 기능 구현/개선 요청, 단계별 진행 요청 시 `doit-orchestrator` 스킬 사용.
 
 | 에이전트 (`.claude/agents/`) | 책임 | HOW 스킬 |
 |------------------------------|------|----------|
@@ -63,4 +63,5 @@ python scripts/e2e_check.py            # 실제 LLM으로 대표 VOC 5개 검증
 
 | 날짜 | 내용 |
 |------|------|
+| 2026-08-20 | 서비스 대상 앱 tika→doit 전환 (프롬프트·브랜딩·시나리오) |
 | 2026-08-18 | 하네스 초기 구성 (에이전트 4 + 스킬 4) |

@@ -8,19 +8,19 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from backend.agent import run_tika_agent  # noqa: E402
+from backend.agent import run_agent  # noqa: E402
 from backend.config import settings  # noqa: E402
 from backend.database import SessionLocal, init_database  # noqa: E402
 from backend.llm import get_llm_provider  # noqa: E402
 
 # (VOC, 기대 유형(None=무관), 기대 에스컬레이션 여부)
 SCENARIOS = [
-    ("완료한 할 일이 목록에서 안 보여요. 어디서 확인하나요?", "사용법문의", False),
-    ("할 일을 어떻게 삭제하나요?", "사용법문의", False),
-    ("완료한 할 일이 목록에서 안 보여요", "사용법문의", False),  # 진술형도 안내로 해결
+    ("완료한 티켓이 보드에서 사라졌어요. 어디서 확인하나요?", "사용법문의", False),
+    ("티켓을 어떻게 삭제하나요?", "사용법문의", False),
+    ("완료한 티켓이 사라졌어요", "사용법문의", False),  # 진술형도 안내로 해결
     ("앱을 켜면 바로 꺼집니다. 고쳐주세요.", "버그제보", True),
     ("다크 모드도 추가해 주세요.", "기능요청", True),
-    ("화면 테마 색을 분홍색으로 바꾸고 싶어요.", None, True),  # 메뉴얼에 없음 → 에스컬레이션
+    ("캘린더도 연동해 주세요.", None, True),  # 요청 표현은 메뉴얼 안내 대상 아님 → 에스컬레이션
 ]
 
 
@@ -33,7 +33,7 @@ def main() -> int:
     init_database()
     failures = 0
     for i, (voc, expected_category, expected_escalated) in enumerate(SCENARIOS, 1):
-        result = run_tika_agent(
+        result = run_agent(
             voc_text=voc,
             session_id=f"e2e-{i}",
             provider=provider,

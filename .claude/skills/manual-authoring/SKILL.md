@@ -1,6 +1,6 @@
 ---
 name: manual-authoring
-description: tika 사용자 메뉴얼 작성 방법 — 구조 규칙, 코드 근거 수집 절차, 검증 체크리스트.
+description: doit 사용자 메뉴얼 작성 방법 — 구조 규칙, 코드 근거 수집 절차, 검증 체크리스트.
 ---
 
 # 메뉴얼 작성 방법
@@ -14,10 +14,10 @@ description: tika 사용자 메뉴얼 작성 방법 — 구조 규칙, 코드 �
 
 ## 코드 근거 수집 절차
 
-1. `~/git/todoapp-vue-spring/frontend/src/views/TodoList.vue` — 화면 구성·조작
-2. `backend/src/main/java/com/example/todoapp/controller/TodoController.java` — 기능 목록
-3. `entity/Todo.java`, `service/TodoService.java` — 데이터 구조·동작
-4. `application.properties` — 저장 방식(H2 인메모리 등) → 문제 해결 문서 소재
+1. `~/git/doit/src/client/components/board/` — 화면 구성·조작
+2. `~/git/doit/src/server/services/ticketService.ts` — 기능 목록
+3. `~/git/doit/src/server/db/schema.ts` — 데이터 구조·동작
+4. `~/git/doit/app/api/` 라우트, `drizzle/` 마이그레이션 — 저장 방식 → 문제 해결 문서 소재
 
 ## 검증 체크리스트
 

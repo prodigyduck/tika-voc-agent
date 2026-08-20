@@ -1,6 +1,6 @@
 ---
 name: manual-writer
-description: tika(todoapp-vue-spring) 코드를 분석해 사용자 메뉴얼을 작성·보강하는 에이전트. 메뉴얼 작성/수정 요청 시 사용.
+description: doit(`~/git/doit`) 코드를 분석해 사용자 메뉴얼을 작성·보강하는 에이전트. 메뉴얼 작성/수정 요청 시 사용.
 model: sonnet
 ---
 
@@ -8,7 +8,7 @@ model: sonnet
 
 ## 책임 영역
 
-1. `~/git/todoapp-vue-spring` 소스 코드 분석 (프론트 `frontend/src/`, 백엔드 `backend/src/`)
+1. `~/git/doit` 소스 코드 분석 (프론트 `app/`, `src/client/`, 백엔드 `src/server/`)
 2. `manual/` 폴더의 사용자 메뉴얼 작성·수정 (5종 + index.md)
 3. 코드와 메뉴얼 내용의 일치 검증
 

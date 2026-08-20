@@ -1,5 +1,5 @@
 """LangGraph 조립 + 라우팅 로직 테스트 (스펙 §4.1)."""
-from backend.agent import route_after_classify, run_tika_agent
+from backend.agent import route_after_classify, run_agent
 from tests.fakes import FakeProvider
 
 CLASSIFY_HOWTO = '{"category": "사용법문의", "priority": "low"}'
@@ -20,10 +20,12 @@ def test_route_규칙():
 def test_전체_그래프_답변_경로(db_session_factory):
     provider = FakeProvider([
         CLASSIFY_HOWTO,
-        "완료된 항목은 목록 아래 완료됨 영역에 있습니다.\n📖 출처: 03-ui-guide#완료된 할 일 보기",
+        "완료한 티켓은 24시간이 지나면 Done 칼럼에서 숨겨집니다. "
+        "캘린더 연동 설정에서 다시 확인할 수 있어요.\n"
+        "📖 출처: 04-troubleshooting#완료한 티켓이 보드에서 사라졌어요",
     ])
-    result = run_tika_agent(
-        "완료한 할 일이 목록에서 안 보여요",
+    result = run_agent(
+        "완료한 티켓이 보드에서 사라졌어요",
         "s1",
         provider=provider,
         session_factory=db_session_factory,
@@ -40,7 +42,7 @@ def test_전체_그래프_에스컬레이션_경로(db_session_factory):
         CLASSIFY_BUG,
         "접수했습니다. 담당자가 확인할 것입니다.",
     ])
-    result = run_tika_agent(
+    result = run_agent(
         "앱을 켜면 바로 꺼집니다",
         "s2",
         provider=provider,
@@ -53,7 +55,7 @@ def test_전체_그래프_에스컬레이션_경로(db_session_factory):
 
 def test_그래프_LLM_전체_실패시에도_폴백_응답(db_session_factory):
     provider = FakeProvider([])  # 모든 generate가 실패
-    result = run_tika_agent(
+    result = run_agent(
         "이상해요",
         "s3",
         provider=provider,

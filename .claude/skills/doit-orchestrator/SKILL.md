@@ -1,5 +1,5 @@
 ---
-name: tika-orchestrator
+name: doit-orchestrator
 description: tika-agent 개발을 구동하는 멀티 에이전트 하네스 오케스트레이터. 기능 구현 시작/계속, 단계별 게이트 운영 시 사용.
 ---
 

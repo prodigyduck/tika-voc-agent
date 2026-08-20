@@ -7,13 +7,13 @@ from typing import Any, Dict, List, Optional
 from backend.llm.base import LLMProvider
 
 NO_MANUAL_ANSWER = (
-    "죄송합니다. 현재 tika 메뉴얼에서 이 문의에 대한 내용을 찾지 못했습니다.\n"
+    "죄송합니다. 현재 doit 메뉴얼에서 이 문의에 대한 내용을 찾지 못했습니다.\n"
     "담당자에게 전달하여 확인 후 안내드리겠습니다."
 )
 
 FALLBACK_ANSWER = "죄송합니다. 지금은 답변을 생성하지 못했습니다. 담당자에게 전달하겠습니다."
 
-ANSWER_PROMPT = """당신은 todo 앱 'tika'의 고객 지원 담당자입니다.
+ANSWER_PROMPT = """당신은 칸반 보드 앱 'doit'의 고객 지원 담당자입니다.
 
 아래 [메뉴얼 근거]에 있는 내용만 사용해서 사용자 VOC에 답변하세요.
 - 근거에 없는 내용을 절대 지어내지 마세요.

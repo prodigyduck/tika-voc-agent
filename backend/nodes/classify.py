@@ -9,7 +9,7 @@ from typing import Any, Dict, Optional
 from backend.constants import CATEGORIES, PRIORITIES
 from backend.llm.base import LLMProvider
 
-CLASSIFY_PROMPT = """당신은 todo 앱 'tika'의 VOC(고객 소리) 분류 전문가입니다.
+CLASSIFY_PROMPT = """당신은 칸반 보드 앱 'doit'의 VOC(고객 소리) 분류 전문가입니다.
 
 사용자 VOC를 다음 기준으로 분류합니다.
 
@@ -25,9 +25,9 @@ CLASSIFY_PROMPT = """당신은 todo 앱 'tika'의 VOC(고객 소리) 분류 전�
 - 기타: 어느 유형에도 속하지 않음
 
 [유형 판정 예시]
-- "완료한 할 일이 목록에서 안 보여요" → 사용법문의 (완료 목록 위치 안내로 해결)
-- "완료한 할 일이 목록에서 안 보여요. 어디서 확인하나요?" → 사용법문의
-- "할 일이 저장되지 않아요" → 버그제보 (저장 실패는 실제 오동작)
+- "완료한 티켓이 보드에서 사라졌어요" → 사용법문의 (완료 티켓 숨김 규칙 안내로 해결)
+- "완료한 티켓이 보드에서 사라졌어요. 어디서 확인하나요?" → 사용법문의
+- "티켓이 저장되지 않아요" → 버그제보 (저장 실패는 실제 오동작)
 - "앱을 켜면 바로 꺼집니다" → 버그제보 (비정상 종료)
 
 [우선순위 (priority)]

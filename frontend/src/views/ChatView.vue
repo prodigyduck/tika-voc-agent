@@ -5,10 +5,10 @@ import ChatMessage from '../components/ChatMessage.vue'
 
 // 프리셋 질문 칩 (스펙 §6.2)
 const PRESETS = [
-  '완료한 할 일이 목록에서 안 보여요',
-  '할 일을 삭제하려면 어떻게 하나요?',
-  '입력한 할 일이 사라졌어요',
-  '이메일로 목록을 보내고 싶어요',
+  '완료한 티켓이 보드에서 사라졌어요',
+  '티켓을 어떻게 삭제하나요?',
+  '티켓이 자꾸 원래 자리로 돌아가요',
+  '마감일을 지난 날짜로 정할 수 있나요?',
 ]
 
 const messages = ref([])
@@ -47,8 +47,8 @@ async function send(text) {
   <section class="chat">
     <div class="message-list" ref="listEl">
       <div v-if="messages.length === 0" class="empty">
-        <h2>tika VOC 에이전트</h2>
-        <p>tika 사용 중 불편하거나 궁금한 점을 입력해 주세요.</p>
+        <h2>doit VOC 에이전트</h2>
+        <p>doit 사용 중 불편하거나 궁금한 점을 입력해 주세요.</p>
       </div>
       <ChatMessage v-for="(m, i) in messages" :key="i" :message="m" />
       <div v-if="waiting" class="message agent">
@@ -64,7 +64,7 @@ async function send(text) {
     <form class="input-row" @submit.prevent="send()">
       <input
         v-model="input"
-        placeholder="예: 할 일이 저장되지 않아요"
+        placeholder="예: 티켓이 저장되지 않아요"
         :disabled="waiting"
       />
       <button type="submit" :disabled="waiting || !input.trim()">보내기</button>
