@@ -28,7 +28,7 @@ npm run build
 
 ### E2E
 ```bash
-python scripts/e2e_check.py            # 실제 LLM으로 대표 VOC 5개 검증 (.env 필요)
+python scripts/e2e_check.py            # 실제 LLM으로 대표 VOC 6개 검증 (.env 필요)
 ```
 
 ## 핵심 아키텍처

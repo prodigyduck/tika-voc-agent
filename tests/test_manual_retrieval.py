@@ -10,10 +10,10 @@ def test_메뉴얼_로드_섹션_분해():
     assert first.content  # 내용이 비어 있지 않음
 
 
-def test_완료_사라짐_문의가_문제해결_섹션을_찾는다():
+def test_삭제_복구_문의가_문제해결_섹션을_찾는다():
     chunks = load_manual()
-    results = search(chunks, "완료한 티켓이 보드에서 사라졌어요", category="불만")
-    assert any("사라졌어요" in c.section for c in results)
+    results = search(chunks, "삭제한 티켓을 되돌리고 싶어요", category="불만")
+    assert any("되돌리고 싶어요" in c.section for c in results)
 
 
 def test_사용법_문의는_가이드_문서_우선():
