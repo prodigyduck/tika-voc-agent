@@ -61,3 +61,17 @@ def test_judge_설정_기본값(monkeypatch):
     fresh = Settings()
     assert fresh.judge_enabled is True
     assert fresh.judge_model == ""
+
+
+def test_엔진_팩토리_파일_sqlite는_커넥션_풀():
+    """파일 SQLite가 StaticPool 단일 커넥션을 쓰면 동시 요청에서 sqlite3 C 레벨
+    크래시(SIGSEGV)가 발생한다 — 파일은 커넥션 풀, 인메모리만 StaticPool."""
+    from sqlalchemy.pool import StaticPool
+
+    from backend.database import _create_engine
+
+    file_engine = _create_engine("sqlite:///./tika_agent.db")
+    assert not isinstance(file_engine.pool, StaticPool)
+
+    memory_engine = _create_engine("sqlite://")
+    assert isinstance(memory_engine.pool, StaticPool)
