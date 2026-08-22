@@ -70,7 +70,7 @@ def test_엔진_팩토리_파일_sqlite는_커넥션_풀():
 
     from backend.database import _create_engine
 
-    file_engine = _create_engine("sqlite:///./tika_agent.db")
+    file_engine = _create_engine("sqlite:///./doit_voc_agent.db")
     assert not isinstance(file_engine.pool, StaticPool)
 
     memory_engine = _create_engine("sqlite://")

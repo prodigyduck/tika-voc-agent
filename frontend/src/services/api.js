@@ -1,4 +1,4 @@
-// tika-agent 백엔드 API 클라이언트
+// doit-voc-agent 백엔드 API 클라이언트
 const BASE_URL = import.meta.env.VITE_API_BASE || 'http://localhost:8000'
 
 async function request(path, options = {}) {

@@ -4,7 +4,7 @@
 
 ## 프로젝트 개요
 
-tika-agent는 티켓 칸반 보드 앱 **doit**(`~/git/doit`)의 사용자 VOC를 처리하는 LLM 에이전트다.
+doit-voc-agent는 티켓 칸반 보드 앱 **doit**(`~/git/doit`)의 사용자 VOC를 처리하는 LLM 에이전트다.
 채팅으로 받은 VOC를 분류(6유형)하고, 메뉴얼(`manual/`)에 근거한 답변을 생성하거나 사람에게 에스컬레이션하며, 이력을 PostgreSQL에 저장한다.
 
 ## 개발 명령

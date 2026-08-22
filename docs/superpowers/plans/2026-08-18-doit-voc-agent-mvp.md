@@ -1,4 +1,4 @@
-# tika-agent MVP 구현 계획
+# doit-voc-agent MVP 구현 계획
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
@@ -8,7 +8,7 @@
 
 **Tech Stack:** Python 3.9+ / FastAPI / LangGraph / SQLAlchemy 2.x / PostgreSQL / OpenAI 호환 API / Vue 3 + Vite / pytest + Vitest
 
-**Spec:** `docs/superpowers/specs/2026-08-18-tika-agent-design.md`
+**Spec:** `docs/superpowers/specs/2026-08-18-doit-voc-agent-design.md`
 
 ## Global Constraints
 
@@ -26,7 +26,7 @@
 - 그래프 노드는 `backend/nodes/`에 파일당 하나
 - 프론트는 Vue3 Composition API(`<script setup>`)만 사용
 - 커밋 메시지: conventional commits (`feat:`, `docs:`, `test:`, `chore:` 등), 한국어 제목, 끝에 `Co-Authored-By: Claude <noreply@anthropic.com>`
-- 작업 디렉터리: `/Users/prodigyduck/git/tika-agent` (이미 git 저장소, main 브랜치)
+- 작업 디렉터리: `/Users/prodigyduck/git/doit-voc-agent` (이미 git 저장소, main 브랜치)
 - 참조 프로젝트(읽기 전용): `~/git/tpssAgent`(골격), `~/git/todoapp-vue-spring`(tika 앱)
 
 ---
@@ -51,7 +51,7 @@
 - [ ] **Step 1: 파이썬 가상환경 및 프로젝트 파일 생성**
 
 ```bash
-cd /Users/prodigyduck/git/tika-agent
+cd /Users/prodigyduck/git/doit-voc-agent
 python3 -m venv .venv
 source .venv/bin/activate
 pip install --upgrade pip
@@ -214,7 +214,7 @@ Expected: FAIL — `ModuleNotFoundError: No module named 'backend'` (또는 conf
 
 `backend/config.py`:
 ```python
-"""tika-agent 설정 — .env 기반 (스펙 §6.3)."""
+"""doit-voc-agent 설정 — .env 기반 (스펙 §6.3)."""
 import os
 
 from dotenv import load_dotenv
@@ -1845,7 +1845,7 @@ Expected: FAIL — `No module named 'backend.agent'`
 
 `backend/agent.py`:
 ```python
-"""tika-agent LangGraph 그래프 — VOC 조건부 파이프라인 (스펙 §4.1).
+"""doit-voc-agent LangGraph 그래프 — VOC 조건부 파이프라인 (스펙 §4.1).
 
 classify → (route) → retrieve → answer → respond → save → END
                 └────→ escalate ──↗
@@ -2151,7 +2151,7 @@ class StatsResponse(BaseModel):
 
 `backend/main.py`:
 ```python
-"""tika-agent FastAPI 애플리케이션 (스펙 §6.1)."""
+"""doit-voc-agent FastAPI 애플리케이션 (스펙 §6.1)."""
 from datetime import datetime, timedelta
 from typing import List, Optional
 
@@ -2175,7 +2175,7 @@ from backend.schemas import (
 
 def create_app(provider=None, session_factory=None) -> FastAPI:
     """앱 팩토리 — 테스트에서 provider/session_factory를 주입한다."""
-    app = FastAPI(title="tika-agent API", version="0.1.0")
+    app = FastAPI(title="doit-voc-agent API", version="0.1.0")
 
     app.add_middleware(
         CORSMiddleware,
@@ -2346,7 +2346,7 @@ Co-Authored-By: Claude <noreply@anthropic.com>"
 - [ ] **Step 1: Vite 스캐폴드 + 의존성**
 
 ```bash
-cd /Users/prodigyduck/git/tika-agent
+cd /Users/prodigyduck/git/doit-voc-agent
 npm create vite@latest frontend -- --template vue
 cd frontend
 npm install
@@ -2411,7 +2411,7 @@ Expected: FAIL — `Cannot find module './markdown'`
 
 `frontend/src/services/api.js`:
 ```javascript
-// tika-agent 백엔드 API 클라이언트
+// doit-voc-agent 백엔드 API 클라이언트
 const BASE_URL = import.meta.env.VITE_API_BASE || 'http://localhost:8000'
 
 async function request(path, options = {}) {
@@ -2538,7 +2538,7 @@ createApp(App).use(router).mount('#app')
 <template>
   <div class="app">
     <nav class="nav">
-      <span class="brand">tika-agent</span>
+      <span class="brand">doit-voc-agent</span>
       <div class="links">
         <RouterLink to="/">VOC 챗</RouterLink>
         <RouterLink to="/dashboard">대시보드</RouterLink>
@@ -2663,7 +2663,7 @@ async function send(text) {
   <section class="chat">
     <div class="message-list" ref="listEl">
       <div v-if="messages.length === 0" class="empty">
-        <h2>tika VOC 에이전트</h2>
+        <h2>doit VOC 에이전트</h2>
         <p>tika 사용 중 불편하거나 궁금한 점을 입력해 주세요.</p>
       </div>
       <ChatMessage v-for="(m, i) in messages" :key="i" :message="m" />
@@ -2995,13 +2995,13 @@ Co-Authored-By: Claude <noreply@anthropic.com>"
 
 **Files:**
 - Create: `.claude/agents/manual-writer.md`, `.claude/agents/backend-engineer.md`, `.claude/agents/frontend-engineer.md`, `.claude/agents/qa-engineer.md`
-- Create: `.claude/skills/tika-orchestrator/SKILL.md`, `.claude/skills/manual-authoring/SKILL.md`, `.claude/skills/voc-pipeline/SKILL.md`, `.claude/skills/dashboard-ui/SKILL.md`
+- Create: `.claude/skills/doit-orchestrator/SKILL.md`, `.claude/skills/manual-authoring/SKILL.md`, `.claude/skills/voc-pipeline/SKILL.md`, `.claude/skills/dashboard-ui/SKILL.md`
 - Create: `CLAUDE.md` (프로젝트 루트)
 - Create: `README.md` (프로젝트 루트 — 실행 가이드)
 
 **Interfaces:**
 - Consumes: 없음 (문서 태스크)
-- Produces: tpssAgent 스타일 하네스 — 이후 기능 추가/개선 요청 시 `tika-orchestrator` 스킬로 구동하는 근거 (스펙 §7)
+- Produces: tpssAgent 스타일 하네스 — 이후 기능 추가/개선 요청 시 `doit-orchestrator` 스킬로 구동하는 근거 (스펙 §7)
 
 **참고 형식:** tpssAgent `~/git/tpssAgent/.claude/agents/qa-engineer.md`(frontmatter `name/description/model` + 책임/원칙/산출물), `~/git/tpssAgent/.claude/skills/tpss-phase23-orchestrator/SKILL.md`(frontmatter `name/description`)
 
@@ -3015,7 +3015,7 @@ description: tika(todoapp-vue-spring) 코드를 분석해 사용자 메뉴얼을
 model: sonnet
 ---
 
-당신은 tika-agent 프로젝트의 **메뉴얼 작성 에이전트**입니다.
+당신은 doit-voc-agent 프로젝트의 **메뉴얼 작성 에이전트**입니다.
 
 ## 책임 영역
 
@@ -3041,11 +3041,11 @@ model: sonnet
 ```markdown
 ---
 name: backend-engineer
-description: tika-agent 백엔드(FastAPI + LangGraph) 구현 에이전트. 그래프 노드, API, LLM 추상화 개발 시 사용.
+description: doit-voc-agent 백엔드(FastAPI + LangGraph) 구현 에이전트. 그래프 노드, API, LLM 추상화 개발 시 사용.
 model: sonnet
 ---
 
-당신은 tika-agent 프로젝트의 **백엔드 구현 에이전트**입니다.
+당신은 doit-voc-agent 프로젝트의 **백엔드 구현 에이전트**입니다.
 
 ## 책임 영역
 
@@ -3072,11 +3072,11 @@ model: sonnet
 ```markdown
 ---
 name: frontend-engineer
-description: tika-agent 프론트엔드(Vue3) 구현 에이전트. 챗 뷰, 대시보드 UI 개발 시 사용.
+description: doit-voc-agent 프론트엔드(Vue3) 구현 에이전트. 챗 뷰, 대시보드 UI 개발 시 사용.
 model: sonnet
 ---
 
-당신은 tika-agent 프로젝트의 **프론트엔드 구현 에이전트**입니다.
+당신은 doit-voc-agent 프로젝트의 **프론트엔드 구현 에이전트**입니다.
 
 ## 책임 영역
 
@@ -3101,11 +3101,11 @@ model: sonnet
 ```markdown
 ---
 name: qa-engineer
-description: tika-agent 품질 게이트 에이전트. 단계 완료 검증, E2E 시나리오 실행, 커밋 승인 판정 시 사용.
+description: doit-voc-agent 품질 게이트 에이전트. 단계 완료 검증, E2E 시나리오 실행, 커밋 승인 판정 시 사용.
 model: sonnet
 ---
 
-당신은 tika-agent 프로젝트의 **QA/품질 게이트 에이전트**입니다.
+당신은 doit-voc-agent 프로젝트의 **QA/품질 게이트 에이전트**입니다.
 
 ## 책임 영역
 
@@ -3131,16 +3131,16 @@ model: sonnet
 
 - [ ] **Step 2: 스킬 4종 작성**
 
-`.claude/skills/tika-orchestrator/SKILL.md`:
+`.claude/skills/doit-orchestrator/SKILL.md`:
 ```markdown
 ---
-name: tika-orchestrator
-description: tika-agent 개발을 구동하는 멀티 에이전트 하네스 오케스트레이터. 기능 구현 시작/계속, 단계별 게이트 운영 시 사용.
+name: doit-orchestrator
+description: doit-voc-agent 개발을 구동하는 멀티 에이전트 하네스 오케스트레이터. 기능 구현 시작/계속, 단계별 게이트 운영 시 사용.
 ---
 
-# tika-agent 오케스트레이터
+# doit-voc-agent 오케스트레이터
 
-tika-agent 개발 작업을 에이전트에 위임하고 품질 게이트로 진행하는 하네스.
+doit-voc-agent 개발 작업을 에이전트에 위임하고 품질 게이트로 진행하는 하네스.
 
 ## 언제 사용하는가
 
@@ -3200,7 +3200,7 @@ description: tika 사용자 메뉴얼 작성 방법 — 구조 규칙, 코드 �
 ```markdown
 ---
 name: voc-pipeline
-description: tika-agent 백엔드 파이프라인(LangGraph 노드/그래프/API) 구현 방법과 TDD 체크리스트.
+description: doit-voc-agent 백엔드 파이프라인(LangGraph 노드/그래프/API) 구현 방법과 TDD 체크리스트.
 ---
 
 # VOC 파이프라인 구현 방법
@@ -3229,7 +3229,7 @@ description: tika-agent 백엔드 파이프라인(LangGraph 노드/그래프/API
 ```markdown
 ---
 name: dashboard-ui
-description: tika-agent 프론트엔드(챗/대시보드) 구현 방법 — Vue3 패턴, 마크다운 렌더, 폴백 UI 규칙.
+description: doit-voc-agent 프론트엔드(챗/대시보드) 구현 방법 — Vue3 패턴, 마크다운 렌더, 폴백 UI 규칙.
 ---
 
 # 프론트엔드 구현 방법
@@ -3261,7 +3261,7 @@ description: tika-agent 프론트엔드(챗/대시보드) 구현 방법 — Vue3
 
 ## 프로젝트 개요
 
-tika-agent는 todo 앱 **tika**(`~/git/todoapp-vue-spring`)의 사용자 VOC를 처리하는 LLM 에이전트다.
+doit-voc-agent는 todo 앱 **tika**(`~/git/todoapp-vue-spring`)의 사용자 VOC를 처리하는 LLM 에이전트다.
 채팅으로 받은 VOC를 분류(6유형)하고, 메뉴얼(`manual/`)에 근거한 답변을 생성하거나 사람에게 에스컬레이션하며, 이력을 PostgreSQL에 저장한다.
 
 ## 개발 명령
@@ -3298,7 +3298,7 @@ python scripts/e2e_check.py            # 실제 LLM으로 대표 VOC 5개 검증
 
 ## VOC 처리 하네스
 
-**트리거:** 기능 구현/개선 요청, 단계별 진행 요청 시 `tika-orchestrator` 스킬 사용.
+**트리거:** 기능 구현/개선 요청, 단계별 진행 요청 시 `doit-orchestrator` 스킬 사용.
 
 | 에이전트 (`.claude/agents/`) | 책임 | HOW 스킬 |
 |------------------------------|------|----------|
@@ -3327,7 +3327,7 @@ python scripts/e2e_check.py            # 실제 LLM으로 대표 VOC 5개 검증
 
 `README.md`:
 ```markdown
-# tika-agent
+# doit-voc-agent
 
 todo 앱 **tika**의 사용자 VOC(Voice of Customer)를 처리하는 LLM 에이전트.
 
@@ -3369,8 +3369,8 @@ python scripts/e2e_check.py      # E2E (실제 LLM, .env 필요)
 
 ## 관련 문서
 
-- 설계: `docs/superpowers/specs/2026-08-18-tika-agent-design.md`
-- 구현 계획: `docs/superpowers/plans/2026-08-18-tika-agent-mvp.md`
+- 설계: `docs/superpowers/specs/2026-08-18-doit-voc-agent-design.md`
+- 구현 계획: `docs/superpowers/plans/2026-08-18-doit-voc-agent-mvp.md`
 - 대상 앱: `~/git/todoapp-vue-spring`
 ```
 
@@ -3472,7 +3472,7 @@ if __name__ == "__main__":
 
 `docs/qa/e2e-checklist.md`:
 ```markdown
-# tika-agent E2E 체크리스트 (MVP 게이트)
+# doit-voc-agent E2E 체크리스트 (MVP 게이트)
 
 실행 조건: postgres 기동 + `.env`의 LLM_API_KEY 설정 + 백엔드/프론트 기동.
 

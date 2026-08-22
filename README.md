@@ -1,4 +1,4 @@
-# tika-agent
+# doit-voc-agent
 
 티켓 칸반 보드 앱 **doit**의 사용자 VOC(Voice of Customer)를 처리하는 LLM 에이전트.
 
@@ -42,6 +42,6 @@ python scripts/e2e_check.py      # E2E (실제 LLM, .env 필요)
 
 ## 관련 문서
 
-- 설계: `docs/superpowers/specs/2026-08-18-tika-agent-design.md`
-- 구현 계획: `docs/superpowers/plans/2026-08-18-tika-agent-mvp.md`
+- 설계: `docs/superpowers/specs/2026-08-18-doit-voc-agent-design.md`
+- 구현 계획: `docs/superpowers/plans/2026-08-18-doit-voc-agent-mvp.md`
 - 대상 앱: `~/git/doit` (티켓 칸반 보드)

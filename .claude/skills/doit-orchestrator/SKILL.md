@@ -1,11 +1,11 @@
 ---
 name: doit-orchestrator
-description: tika-agent 개발을 구동하는 멀티 에이전트 하네스 오케스트레이터. 기능 구현 시작/계속, 단계별 게이트 운영 시 사용.
+description: doit-voc-agent 개발을 구동하는 멀티 에이전트 하네스 오케스트레이터. 기능 구현 시작/계속, 단계별 게이트 운영 시 사용.
 ---
 
-# tika-agent 오케스트레이터
+# doit-voc-agent 오케스트레이터
 
-tika-agent 개발 작업을 에이전트에 위임하고 품질 게이트로 진행하는 하네스.
+doit-voc-agent 개발 작업을 에이전트에 위임하고 품질 게이트로 진행하는 하네스.
 
 ## 언제 사용하는가
 

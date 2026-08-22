@@ -1,4 +1,4 @@
-# Phase 2: LLM-as-a-Judge 설계 (tika-agent)
+# Phase 2: LLM-as-a-Judge 설계 (doit-voc-agent)
 
 **일자**: 2026-08-21
 **상태**: 승인됨 (사용자 확정 2026-08-21)

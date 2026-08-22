@@ -1,6 +1,6 @@
 ---
 name: voc-pipeline
-description: tika-agent 백엔드 파이프라인(LangGraph 노드/그래프/API) 구현 방법과 TDD 체크리스트.
+description: doit-voc-agent 백엔드 파이프라인(LangGraph 노드/그래프/API) 구현 방법과 TDD 체크리스트.
 ---
 
 # VOC 파이프라인 구현 방법

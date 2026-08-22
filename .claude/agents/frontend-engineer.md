@@ -1,10 +1,10 @@
 ---
 name: frontend-engineer
-description: tika-agent 프론트엔드(Vue3) 구현 에이전트. 챗 뷰, 대시보드 UI 개발 시 사용.
+description: doit-voc-agent 프론트엔드(Vue3) 구현 에이전트. 챗 뷰, 대시보드 UI 개발 시 사용.
 model: sonnet
 ---
 
-당신은 tika-agent 프로젝트의 **프론트엔드 구현 에이전트**입니다.
+당신은 doit-voc-agent 프로젝트의 **프론트엔드 구현 에이전트**입니다.
 
 ## 책임 영역
 

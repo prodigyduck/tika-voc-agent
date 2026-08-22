@@ -1,6 +1,6 @@
 ---
 name: dashboard-ui
-description: tika-agent 프론트엔드(챗/대시보드) 구현 방법 — Vue3 패턴, 마크다운 렌더, 폴백 UI 규칙.
+description: doit-voc-agent 프론트엔드(챗/대시보드) 구현 방법 — Vue3 패턴, 마크다운 렌더, 폴백 UI 규칙.
 ---
 
 # 프론트엔드 구현 방법

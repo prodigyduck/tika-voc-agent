@@ -1,4 +1,4 @@
-"""tika-agent LangGraph 그래프 — VOC 조건부 파이프라인 (스펙 §4.1).
+"""doit-voc-agent LangGraph 그래프 — VOC 조건부 파이프라인 (스펙 §4.1).
 
 classify → (route) → retrieve → generate_answer → compose_response → save → END
                 └────→ escalate ──↗

@@ -1,4 +1,4 @@
-# tika-agent 설계 문서
+# doit-voc-agent 설계 문서
 
 - **날짜**: 2026-08-18
 - **상태**: 승인됨 (브레인스토밍 5섹션 발표 완료)
@@ -8,7 +8,7 @@
 
 ## 1. 개요
 
-**tika-agent**는 todo 앱 **tika**(`todoapp-vue-spring`, Vue3 + Spring Boot, Things 3 스타일)의 사용자 VOC(Voice of Customer)를 처리하는 LLM 에이전트 시스템이다.
+**doit-voc-agent**는 todo 앱 **tika**(`todoapp-vue-spring`, Vue3 + Spring Boot, Things 3 스타일)의 사용자 VOC(Voice of Customer)를 처리하는 LLM 에이전트 시스템이다.
 
 사용자가 채팅창에 입력한 VOC를 받아 **분류 → 메뉴얼 기반 답변 또는 에스컬레이션 → 이력 저장**의 전체 파이프라인을 수행하고, 담당자는 대시보드에서 통계와 에스컬레이션을 관리한다.
 
@@ -52,7 +52,7 @@ tpssAgent의 **골격만** 재사용하고(FastAPI 구조, SQLAlchemy 패턴, LL
 ## 3. 전체 아키텍처 & 폴더 구조
 
 ```
-tika-agent/
+doit-voc-agent/
 ├── CLAUDE.md                  # 프로젝트 가이드 (tpssAgent CLAUDE.md 스타일)
 ├── README.md
 ├── .env.example               # LLM_PROVIDER, LLM_BASE_URL, LLM_MODEL, LLM_API_KEY, DATABASE_URL
@@ -98,7 +98,7 @@ tika-agent/
 │
 └── .claude/                   # 개발 하네스
     ├── agents/                # manual-writer, backend-engineer, frontend-engineer, qa-engineer
-    └── skills/                # tika-orchestrator, manual-authoring, voc-pipeline, dashboard-ui
+    └── skills/                # doit-orchestrator, manual-authoring, voc-pipeline, dashboard-ui
 ```
 
 ### tpssAgent와 의도적으로 다른 점
@@ -106,7 +106,7 @@ tika-agent/
 1. **노드를 `nodes/` 패키지로 분리** — tpssAgent는 `agent.py`에 노드가 몰려 있음. VOC 그래프는 조건부 분기가 있어 파일 분리가 유지보수에 유리.
 2. **로그 파일을 남기지 않음** — tpssAgent의 `backend_*.log` 난립은 교훈. 콘솔 출력만.
 3. **mock 데이터 없음** — 메뉴얼이 곧 데이터. mock RAG/mock DB 불필요.
-4. **기본 LLM 구현이 실제 호출** — tpssAgent는 내부 LLM mock이 기본. tika-agent는 OpenAI 호환 실구현이 기본.
+4. **기본 LLM 구현이 실제 호출** — tpssAgent는 내부 LLM mock이 기본. doit-voc-agent는 OpenAI 호환 실구현이 기본.
 
 ### 데이터 흐름
 
@@ -344,7 +344,7 @@ LLM_MODEL=gpt-4o-mini
 
 | 스킬 | 내용 |
 |------|------|
-| `tika-orchestrator` | 오케스트레이션: 단계 순서, 게이트 판정, 병렬화 결정 |
+| `doit-orchestrator` | 오케스트레이션: 단계 순서, 게이트 판정, 병렬화 결정 |
 | `manual-authoring` | 메뉴얼 작성 방법 (구조 규칙, 코드 근거 수집, 검증 체크리스트) |
 | `voc-pipeline` | LangGraph 노드/그래프 구현 방법 + TDD 체크리스트 |
 | `dashboard-ui` | 프론트 구현 방법 (tpssAgent 패턴 재사용 지침) |
@@ -370,7 +370,7 @@ LLM_MODEL=gpt-4o-mini
 
 ### 7.3 CLAUDE.md
 
-tpssAgent 스타일 — 프로젝트 개요, 개발 명령, 아키텍처 요약, **하네스 트리거 규칙**(어떤 요청에 `tika-orchestrator`를 쓰는지), 변경 이력 표.
+tpssAgent 스타일 — 프로젝트 개요, 개발 명령, 아키텍처 요약, **하네스 트리거 규칙**(어떤 요청에 `doit-orchestrator`를 쓰는지), 변경 이력 표.
 
 ---
 

@@ -1,4 +1,4 @@
-# tika-agent E2E 체크리스트 (MVP 게이트)
+# doit-voc-agent E2E 체크리스트 (MVP 게이트)
 
 실행 조건: postgres 기동 + `.env`의 LLM_API_KEY 설정 + 백엔드/프론트 기동.
 

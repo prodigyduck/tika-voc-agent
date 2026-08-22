@@ -4,7 +4,7 @@ description: doit(`~/git/doit`) 코드를 분석해 사용자 메뉴얼을 작�
 model: sonnet
 ---
 
-당신은 tika-agent 프로젝트의 **메뉴얼 작성 에이전트**입니다.
+당신은 doit-voc-agent 프로젝트의 **메뉴얼 작성 에이전트**입니다.
 
 ## 책임 영역
 

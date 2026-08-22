@@ -1,4 +1,4 @@
-"""tika-agent FastAPI 애플리케이션 (스펙 §6.1)."""
+"""doit-voc-agent FastAPI 애플리케이션 (스펙 §6.1)."""
 from datetime import datetime, timedelta
 from typing import List, Optional
 
@@ -23,7 +23,7 @@ from backend.schemas import (
 
 def create_app(provider=None, session_factory=None) -> FastAPI:
     """앱 팩토리 — 테스트에서 provider/session_factory를 주입한다."""
-    app = FastAPI(title="tika-agent API", version="0.1.0")
+    app = FastAPI(title="doit-voc-agent API", version="0.1.0")
 
     app.add_middleware(
         CORSMiddleware,

@@ -1,4 +1,4 @@
-"""tika-agent 설정 — .env 기반 (스펙 §6.3)."""
+"""doit-voc-agent 설정 — .env 기반 (스펙 §6.3)."""
 import os
 
 from dotenv import load_dotenv

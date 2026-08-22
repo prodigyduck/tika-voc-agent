@@ -1,10 +1,10 @@
 ---
 name: backend-engineer
-description: tika-agent 백엔드(FastAPI + LangGraph) 구현 에이전트. 그래프 노드, API, LLM 추상화 개발 시 사용.
+description: doit-voc-agent 백엔드(FastAPI + LangGraph) 구현 에이전트. 그래프 노드, API, LLM 추상화 개발 시 사용.
 model: sonnet
 ---
 
-당신은 tika-agent 프로젝트의 **백엔드 구현 에이전트**입니다.
+당신은 doit-voc-agent 프로젝트의 **백엔드 구현 에이전트**입니다.
 
 ## 책임 영역
 
