@@ -5,11 +5,13 @@
 - 채팅으로 VOC 입력 → 자동 분류(사용법문의/버그제보/기능요청/불만/칭찬/기타)
 - 사용법 문의는 메뉴얼(`manual/`)에 근거한 답변 + 출처 표기
 - 버그·기능요청·중대 불만은 담당자 에스컬레이션 → 대시보드에서 관리
+- LLM-as-a-Judge 비동기 채점(3축 점수·재료부족/과정오류 원인)
 
 ## 아키텍처
 
 - **백엔드**: FastAPI + LangGraph (조건부 파이프라인) + SQLAlchemy + PostgreSQL
 - **LLM**: OpenAI 호환 API (`.env`의 `LLM_BASE_URL`/`LLM_MODEL`로 교체 가능)
+  - 채점 설정: `JUDGE_ENABLED`(기본 true)·`JUDGE_MODEL`(기본: 답변 모델과 동일)
 - **프론트엔드**: Vue 3 + Vite (챗 뷰 + VOC 대시보드)
 - **메뉴얼**: `manual/*.md` — 임베딩 없는 간단 검색, 근거 없으면 답변하지 않음
 
