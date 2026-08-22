@@ -6,6 +6,7 @@ from tests.fakes import FakeProvider
 
 CLASSIFY_HOWTO = '{"category": "사용법문의", "priority": "low"}'
 CLASSIFY_BUG = '{"category": "버그제보", "priority": "high"}'
+JUDGE_PERFECT = '{"completeness": 5, "accuracy": 5, "fluency": 5, "cause": "해당없음", "reason": ""}'
 
 
 def make_provider(responses):
@@ -21,6 +22,7 @@ def test_chat_정상_답변_경로(db_session_factory):
     app = make_app(provider=make_provider([
         CLASSIFY_HOWTO,
         "완료됨 영역을 펼쳐 보세요.\n📖 출처: 03-ui-guide#완료된 할 일 보기",
+        JUDGE_PERFECT,
     ]), session_factory=db_session_factory)
     client = TestClient(app)
 
@@ -67,6 +69,7 @@ def test_vocs_목록_필터(db_session_factory):
     provider = make_provider([
         CLASSIFY_HOWTO,
         "답변입니다.\n📖 출처: 03-ui-guide#완료된 할 일 보기",
+        JUDGE_PERFECT,  # 1번째 채팅(답변 경로)의 백그라운드 채점 응답
         CLASSIFY_BUG,
         "접수했습니다.",
     ])
@@ -115,6 +118,7 @@ def test_stats(db_session_factory):
     provider = make_provider([
         CLASSIFY_HOWTO,
         "답변입니다.\n📖 출처: 03-ui-guide#완료된 할 일 보기",
+        JUDGE_PERFECT,  # 1번째 채팅(답변 경로)의 백그라운드 채점 응답
         CLASSIFY_BUG,
         "접수했습니다.",
     ])
@@ -137,3 +141,49 @@ def test_health(db_session_factory):
     resp = client.get("/health")
     assert resp.status_code == 200
     assert resp.json()["status"] == "ok"
+
+
+def test_chat_응답_후_백그라운드_채점(db_session_factory):
+    from backend.models import VocRecord
+
+    app = make_app(provider=make_provider([
+        CLASSIFY_HOWTO,
+        "티켓 삭제 방법 안내입니다.\n📖 출처: 02-managing-todos#티켓 삭제하기",
+        JUDGE_PERFECT,
+    ]), session_factory=db_session_factory)
+    client = TestClient(app)
+
+    resp = client.post("/api/chat", json={"voc_text": "티켓을 어떻게 삭제하나요?", "session_id": "j1"})
+    assert resp.status_code == 200
+    # TestClient는 응답 직후 백그라운드 태스크를 동기 실행한다
+
+    db = db_session_factory()
+    record = db.query(VocRecord).first()
+    db.close()
+    assert record.judge_total == 15
+    assert record.judge_cause == "해당없음"
+
+
+def test_chat_채점_비활성화(monkeypatch, db_session_factory):
+    from backend import config
+
+    monkeypatch.setattr(config.settings, "judge_enabled", False)
+    app = make_app(provider=make_provider([
+        CLASSIFY_HOWTO,
+        "티켓 삭제 방법 안내입니다.\n📖 출처: 02-managing-todos#티켓 삭제하기",
+    ]), session_factory=db_session_factory)  # 판정 응답 2개만 — 채점 호출되면 FakeProvider 예외로 실패
+    client = TestClient(app)
+
+    resp = client.post("/api/chat", json={"voc_text": "티켓 삭제 방법은?", "session_id": "j2"})
+    assert resp.status_code == 200
+
+
+def test_chat_에스컬레이션은_채점_스킵(db_session_factory):
+    app = make_app(provider=make_provider([
+        CLASSIFY_BUG,
+        "접수했습니다.",
+    ]), session_factory=db_session_factory)  # 판정 응답 2개만 — 채점 LLM 호출 없이 통과해야 함
+    client = TestClient(app)
+
+    resp = client.post("/api/chat", json={"voc_text": "앱이 꺼져요", "session_id": "j3"})
+    assert resp.status_code == 200
