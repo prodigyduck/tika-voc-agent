@@ -1,4 +1,6 @@
 """FastAPI 엔드포인트 테스트 (스펙 §6.1)."""
+from datetime import datetime
+
 from fastapi.testclient import TestClient
 
 from backend.main import create_app
@@ -259,9 +261,9 @@ def test_stats_채점_0건은_null(db_session_factory):
 def test_voc_단건에_채점_필드_노출(db_session_factory):
     app = make_app(provider=make_provider([]), session_factory=db_session_factory)
     client = TestClient(app)
-    _add_voc_direct(db_session_factory, judge_scores={"completeness": 4, "accuracy": 5, "fluency": 5}, judge_total=14, judge_cause="재료부족", judge_reason="복구 절차 없음")
+    _add_voc_direct(db_session_factory, judge_scores={"completeness": 4, "accuracy": 5, "fluency": 5}, judge_total=14, judge_cause="재료부족", judge_reason="복구 절차 없음", judged_at=datetime.utcnow())
 
     voc = client.get("/api/vocs").json()[0]
     assert voc["judge_total"] == 14
     assert voc["judge_reason"] == "복구 절차 없음"
-    assert voc["judged_at"] is None or voc["judged_at"]
+    assert voc["judged_at"] is not None

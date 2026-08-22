@@ -97,12 +97,14 @@ def test_run_judge_에스컬레이션은_llm_호출_없이_스킵(db_session_fac
     record = _add_record(db, answer="접수했습니다.", answer_sources=None, escalated=True)
     # 세션을 닫지 않고 유지
 
-    run_judge(record.id, FakeProvider([]), db_session_factory)  # 응답 소진 예외 없이 통과
+    provider = FakeProvider([])
+    run_judge(record.id, provider, db_session_factory)
 
     db = db_session_factory()
     found = db.query(VocRecord).filter(VocRecord.id == record.id).first()
     db.close()
     assert found.judge_total is None
+    assert provider.calls == []  # LLM 호출이 없었다 — 스킵이지 예외 삼킴이 아님
 
 
 def test_build_judge_prompt_재료_포함():
