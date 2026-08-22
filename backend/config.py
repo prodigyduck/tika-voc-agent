@@ -17,6 +17,9 @@ class Settings:
         self.llm_base_url: str = os.getenv("LLM_BASE_URL", "https://api.openai.com/v1")
         self.llm_api_key: str = os.getenv("LLM_API_KEY", "")
         self.llm_model: str = os.getenv("LLM_MODEL", "gpt-4o-mini")
+        self.judge_enabled: bool = os.getenv("JUDGE_ENABLED", "true").lower() in ("1", "true", "yes")
+        # 빈 값이면 기존 LLM 프로바이더(모델)를 그대로 채점에 재사용한다
+        self.judge_model: str = os.getenv("JUDGE_MODEL", "")
 
 
 settings = Settings()

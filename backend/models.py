@@ -19,5 +19,11 @@ class VocRecord(Base):
     escalated = Column(Boolean, nullable=False, default=False)
     escalation_reason = Column(String(200), nullable=True)
     escalation_status = Column(String(10), nullable=False, default="open")
+    # Phase 2 — LLM-as-a-Judge 채점 결과 (스펙 2026-08-21 §3). 미채점은 전부 null
+    judge_scores = Column(JSON, nullable=True)       # {"completeness": 1-5, "accuracy": 1-5, "fluency": 1-5}
+    judge_total = Column(Integer, nullable=True)     # 세 축 합계 3~15
+    judge_cause = Column(String(20), nullable=True)  # "재료부족"|"과정오류"|"해당없음"
+    judge_reason = Column(String(200), nullable=True)
+    judged_at = Column(DateTime, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow, index=True)
     resolved_at = Column(DateTime, nullable=True)

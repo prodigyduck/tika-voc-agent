@@ -39,3 +39,25 @@ def test_설정_기본값_로드(monkeypatch):
     assert fresh.llm_provider == "openai_compat"
     assert fresh.llm_base_url == "https://api.openai.com/v1"
     assert fresh.llm_model == "gpt-4o-mini"
+
+
+def test_judge_컬럼_기본값은_미채점(db_session):
+    db_session.add(VocRecord(session_id="j1", voc_text="완료한 티켓이 사라졌어요", category="사용법문의", priority="low"))
+    db_session.commit()
+
+    found = db_session.query(VocRecord).filter_by(session_id="j1").first()
+    assert found.judge_scores is None
+    assert found.judge_total is None
+    assert found.judge_cause is None
+    assert found.judge_reason is None
+    assert found.judged_at is None
+
+
+def test_judge_설정_기본값(monkeypatch):
+    from backend.config import Settings
+
+    for key in ("JUDGE_ENABLED", "JUDGE_MODEL"):
+        monkeypatch.delenv(key, raising=False)
+    fresh = Settings()
+    assert fresh.judge_enabled is True
+    assert fresh.judge_model == ""
