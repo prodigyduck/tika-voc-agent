@@ -11,7 +11,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from backend.agent import run_agent  # noqa: E402
 from backend.config import settings  # noqa: E402
 from backend.database import SessionLocal, init_database  # noqa: E402
-from backend.judge import JUDGE_CAUSES, run_judge  # noqa: E402
+from backend.judge import JUDGE_CAUSES, get_judge_provider, run_judge  # noqa: E402
 from backend.llm import get_llm_provider  # noqa: E402
 from backend.models import VocRecord  # noqa: E402
 
@@ -48,7 +48,7 @@ def main() -> int:
         ok_judge = True
         judge_line = ""
         if result.get("answer_sources") and result.get("voc_id"):
-            run_judge(result["voc_id"], provider, SessionLocal)
+            run_judge(result["voc_id"], get_judge_provider(settings, provider), SessionLocal)
             db = SessionLocal()
             try:
                 rec = db.query(VocRecord).filter(VocRecord.id == result["voc_id"]).first()

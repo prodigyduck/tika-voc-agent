@@ -8,9 +8,20 @@ import re
 from datetime import datetime
 from typing import Any, Dict, List, Optional
 
+from backend.config import Settings
 from backend.llm.base import LLMProvider
 from backend.manual_retrieval import load_manual
 from backend.models import VocRecord
+
+
+def get_judge_provider(settings: Settings, fallback_provider):
+    """JUDGE_MODEL이 설정되면 채점 전용 provider를 생성, 아니면 fallback 재사용."""
+    if settings.judge_model and settings.judge_model != settings.llm_model:
+        from backend.llm import get_llm_provider
+
+        return get_llm_provider(settings, model=settings.judge_model) or fallback_provider
+    return fallback_provider
+
 
 JUDGE_CAUSES = ("재료부족", "과정오류", "해당없음")
 AXES = ("completeness", "accuracy", "fluency")

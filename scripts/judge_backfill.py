@@ -10,15 +10,16 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from backend.config import settings  # noqa: E402
 from backend.database import SessionLocal, init_database  # noqa: E402
-from backend.judge import iter_judge_pending, run_judge  # noqa: E402
+from backend.judge import get_judge_provider, iter_judge_pending, run_judge  # noqa: E402
 from backend.llm import get_llm_provider  # noqa: E402
 
 
 def main() -> int:
-    provider = get_llm_provider(settings)
-    if provider is None:
+    answer_provider = get_llm_provider(settings)
+    if answer_provider is None:
         print("LLM이 설정되지 않았습니다. .env의 LLM_API_KEY를 확인하세요.")
         return 2
+    provider = get_judge_provider(settings, answer_provider)
 
     init_database()
     db = SessionLocal()

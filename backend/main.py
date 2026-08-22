@@ -9,7 +9,7 @@ from backend.agent import run_agent
 from backend.config import settings
 from backend.constants import ESCALATION_STATUSES
 from backend.database import SessionLocal, init_database
-from backend.judge import run_judge
+from backend.judge import get_judge_provider, run_judge
 from backend.llm import get_llm_provider
 from backend.models import VocRecord
 from backend.schemas import (
@@ -54,9 +54,7 @@ def create_app(provider=None, session_factory=None) -> FastAPI:
         )
         voc_id = result.get("voc_id")
         if settings.judge_enabled and voc_id is not None:
-            judge_provider = provider
-            if settings.judge_model and settings.judge_model != settings.llm_model:
-                judge_provider = get_llm_provider(settings, model=settings.judge_model) or provider
+            judge_provider = get_judge_provider(settings, provider)
             background_tasks.add_task(run_judge, voc_id, judge_provider, app.state.session_factory)
         return ChatResponse(
             response=result.get("response", ""),

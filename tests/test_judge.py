@@ -124,3 +124,61 @@ def test_iter_judge_pending_미채점_대상만(db_session_factory):
     pending = iter_judge_pending(db)
     db.close()
     assert len(pending) == 1
+
+
+def test_get_judge_provider_미설정시_fallback_재사용(monkeypatch):
+    from backend import llm as llm_mod
+    from backend.config import Settings
+    from backend.judge import get_judge_provider
+
+    def _no_call(*args, **kwargs):
+        raise AssertionError("get_llm_provider가 호출되면 안 됨")
+
+    monkeypatch.setattr(llm_mod, "get_llm_provider", _no_call)
+    sentinel = object()
+    settings = Settings.__new__(Settings)  # .env 로드 회피
+    settings.judge_model = ""
+    settings.llm_model = "glm-4.7"
+    assert get_judge_provider(settings, sentinel) is sentinel
+
+
+def test_get_judge_provider_설정시_별도_생성(monkeypatch):
+    from backend import llm as llm_mod
+    from backend.config import Settings
+    from backend.judge import get_judge_provider
+
+    sentinel = object()
+    monkeypatch.setattr(llm_mod, "get_llm_provider", lambda settings, model=None: sentinel)
+    settings = Settings.__new__(Settings)
+    settings.judge_model = "glm-4.7-air"
+    settings.llm_model = "glm-4.7"
+    assert get_judge_provider(settings, "fallback") is sentinel
+
+
+def test_get_judge_provider_설정_but_팩토리_None시_fallback(monkeypatch):
+    from backend import llm as llm_mod
+    from backend.config import Settings
+    from backend.judge import get_judge_provider
+
+    monkeypatch.setattr(llm_mod, "get_llm_provider", lambda settings, model=None: None)
+    settings = Settings.__new__(Settings)
+    settings.judge_model = "glm-4.7-air"
+    settings.llm_model = "glm-4.7"
+    fallback = object()
+    assert get_judge_provider(settings, fallback) is fallback
+
+
+def test_get_judge_provider_동일모델이면_fallback(monkeypatch):
+    from backend import llm as llm_mod
+    from backend.config import Settings
+    from backend.judge import get_judge_provider
+
+    def _no_call(*args, **kwargs):
+        raise AssertionError("get_llm_provider가 호출되면 안 됨")
+
+    monkeypatch.setattr(llm_mod, "get_llm_provider", _no_call)
+    sentinel = object()
+    settings = Settings.__new__(Settings)
+    settings.judge_model = "glm-4.7"
+    settings.llm_model = "glm-4.7"
+    assert get_judge_provider(settings, sentinel) is sentinel
