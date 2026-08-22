@@ -73,6 +73,7 @@ def create_app(provider=None, session_factory=None) -> FastAPI:
         category: Optional[str] = None,
         escalated: Optional[bool] = None,
         status: Optional[str] = None,
+        judge_cause: Optional[str] = None,
         limit: int = Query(default=100, le=500),
     ):
         db = app.state.session_factory()
@@ -84,6 +85,11 @@ def create_app(provider=None, session_factory=None) -> FastAPI:
                 query = query.filter(VocRecord.escalated == escalated)
             if status:
                 query = query.filter(VocRecord.escalation_status == status)
+            if judge_cause:
+                if judge_cause == "미채점":
+                    query = query.filter(VocRecord.judge_cause.is_(None))
+                else:
+                    query = query.filter(VocRecord.judge_cause == judge_cause)
             return query.limit(limit).all()
         finally:
             db.close()
@@ -135,11 +141,24 @@ def create_app(provider=None, session_factory=None) -> FastAPI:
                 key = r.created_at.date().isoformat()
                 if key in by_day:
                     by_day[key] += 1
+            judged = [r for r in records if r.judge_total is not None]
+            avg_judge_total = (
+                round(sum(r.judge_total for r in judged) / len(judged), 1) if judged else None
+            )
+            low_score_count = sum(1 for r in judged if r.judge_total <= 9)
+            material_gap_count = sum(1 for r in records if r.judge_cause == "재료부족")
+            material_gap_count += sum(
+                1 for r in records
+                if r.category == "사용법문의" and r.escalated and not r.answer_sources
+            )
             return StatsResponse(
                 total=len(records),
                 by_category=by_category,
                 escalated_open=escalated_open,
                 by_day=[{"date": d, "count": c} for d, c in by_day.items()],
+                avg_judge_total=avg_judge_total,
+                low_score_count=low_score_count,
+                material_gap_count=material_gap_count,
             )
         finally:
             db.close()

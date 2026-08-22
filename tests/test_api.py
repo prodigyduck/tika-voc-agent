@@ -202,3 +202,66 @@ def test_chat_에스컬레이션은_채점_스킵(db_session_factory):
     record = db.query(VocRecord).first()
     db.close()
     assert record.judge_total is None
+
+
+def _add_voc_direct(session_factory, **kw):
+    from backend.models import VocRecord
+
+    defaults = dict(
+        session_id="d", voc_text="티켓 삭제 문의", category="사용법문의", priority="low",
+        answer="안내 답변", answer_sources=["02-managing-todos#티켓 삭제하기"],
+    )
+    defaults.update(kw)
+    db = session_factory()
+    db.add(VocRecord(**defaults))
+    db.commit()
+    db.close()
+
+
+def test_vocs_judge_cause_필터(db_session_factory):
+    app = make_app(provider=make_provider([]), session_factory=db_session_factory)
+    client = TestClient(app)
+    _add_voc_direct(db_session_factory, judge_cause="재료부족", judge_total=8)
+    _add_voc_direct(db_session_factory, session_id="d2", judge_cause="과정오류", judge_total=10)
+    _add_voc_direct(db_session_factory, session_id="d3")  # 미채점
+
+    gaps = client.get("/api/vocs", params={"judge_cause": "재료부족"}).json()
+    assert len(gaps) == 1 and gaps[0]["judge_cause"] == "재료부족"
+    pending = client.get("/api/vocs", params={"judge_cause": "미채점"}).json()
+    assert len(pending) == 1 and pending[0]["judge_total"] is None
+
+
+def test_stats_채점_집계(db_session_factory):
+    app = make_app(provider=make_provider([]), session_factory=db_session_factory)
+    client = TestClient(app)
+    _add_voc_direct(db_session_factory, judge_scores={"completeness": 5, "accuracy": 5, "fluency": 4}, judge_total=14, judge_cause="해당없음")
+    _add_voc_direct(db_session_factory, session_id="d2", judge_total=8, judge_cause="재료부족")   # 저점수 + 재료부족
+    _add_voc_direct(db_session_factory, session_id="d3", answer="찾지 못했습니다", answer_sources=None, escalated=True)  # 결정론적 재료부족
+    _add_voc_direct(db_session_factory, session_id="d4", answer="접수했습니다", answer_sources=None, escalated=True, category="버그제보")  # 재료부족 아님
+
+    stats = client.get("/api/stats").json()
+    assert stats["avg_judge_total"] == 11.0
+    assert stats["low_score_count"] == 1
+    assert stats["material_gap_count"] == 2  # judge_cause 1건 + 결정론적 1건
+
+
+def test_stats_채점_0건은_null(db_session_factory):
+    app = make_app(provider=make_provider([]), session_factory=db_session_factory)
+    client = TestClient(app)
+    _add_voc_direct(db_session_factory, answer="접수했습니다", answer_sources=None, escalated=True, category="버그제보")
+
+    stats = client.get("/api/stats").json()
+    assert stats["avg_judge_total"] is None
+    assert stats["low_score_count"] == 0
+    assert stats["material_gap_count"] == 0
+
+
+def test_voc_단건에_채점_필드_노출(db_session_factory):
+    app = make_app(provider=make_provider([]), session_factory=db_session_factory)
+    client = TestClient(app)
+    _add_voc_direct(db_session_factory, judge_scores={"completeness": 4, "accuracy": 5, "fluency": 5}, judge_total=14, judge_cause="재료부족", judge_reason="복구 절차 없음")
+
+    voc = client.get("/api/vocs").json()[0]
+    assert voc["judge_total"] == 14
+    assert voc["judge_reason"] == "복구 절차 없음"
+    assert voc["judged_at"] is None or voc["judged_at"]
