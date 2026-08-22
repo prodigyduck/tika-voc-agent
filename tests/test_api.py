@@ -166,24 +166,39 @@ def test_chat_응답_후_백그라운드_채점(db_session_factory):
 
 def test_chat_채점_비활성화(monkeypatch, db_session_factory):
     from backend import config
+    from backend.models import VocRecord
 
     monkeypatch.setattr(config.settings, "judge_enabled", False)
     app = make_app(provider=make_provider([
         CLASSIFY_HOWTO,
         "티켓 삭제 방법 안내입니다.\n📖 출처: 02-managing-todos#티켓 삭제하기",
-    ]), session_factory=db_session_factory)  # 판정 응답 2개만 — 채점 호출되면 FakeProvider 예외로 실패
+        JUDGE_PERFECT,  # 채점이 실행되면 이 응답을 소비하여 judge_total=15 기록
+    ]), session_factory=db_session_factory)  # 채점이 실행됐다면 judge_total이 기록됨 — 비활성화면 null 유지
     client = TestClient(app)
 
     resp = client.post("/api/chat", json={"voc_text": "티켓 삭제 방법은?", "session_id": "j2"})
     assert resp.status_code == 200
 
+    db = db_session_factory()
+    record = db.query(VocRecord).first()
+    db.close()
+    assert record.judge_total is None
+
 
 def test_chat_에스컬레이션은_채점_스킵(db_session_factory):
+    from backend.models import VocRecord
+
     app = make_app(provider=make_provider([
         CLASSIFY_BUG,
         "접수했습니다.",
-    ]), session_factory=db_session_factory)  # 판정 응답 2개만 — 채점 LLM 호출 없이 통과해야 함
+        JUDGE_PERFECT,  # 채점이 실행되면 이 응답을 소비하여 judge_total=15 기록
+    ]), session_factory=db_session_factory)  # 채점이 실행됐다면 judge_total이 기록됨 — 에스컬레이션엔 스킵
     client = TestClient(app)
 
     resp = client.post("/api/chat", json={"voc_text": "앱이 꺼져요", "session_id": "j3"})
     assert resp.status_code == 200
+
+    db = db_session_factory()
+    record = db.query(VocRecord).first()
+    db.close()
+    assert record.judge_total is None
